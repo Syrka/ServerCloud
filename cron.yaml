@@ -1,0 +1,25 @@
+cron:
+- description: status checker job
+  url: /status/
+  schedule: every 15 minutes
+  target: servercloud-sara
+
+- description: timeout checker job
+  url: /timeout/
+  schedule: every 15 minutes
+  target: servercloud-sara
+
+- description: ping checker job
+  url: /ping/
+  schedule: every 15 minutes
+  target: servercloud-sara
+
+- description: address checker job
+  url: /address/
+  schedule: every 15 minutes
+  target: servercloud-sara
+
+- description: content changed checker job
+  url: /content_changed/
+  schedule: every 15 minutes
+  target: servercloud-sara

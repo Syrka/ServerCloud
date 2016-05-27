@@ -1,0 +1,34 @@
+{% extends 'common/base.html' %}
+{% block body %}
+    <h1>{{ object.site }}</h1>
+    <table class="table">
+    <thead>
+        <tr>
+            <td>Status</td>
+            <td>Address</td>
+            <td>SSL</td>
+            <td>Ping</td>
+            <td>Timeout</td>
+            <td>Changed</td>
+            <td>Last Updated</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{ object.status }}</td>
+            <td>{{ object.address }}</td>
+            <td>
+                {% if not object.ssl %}
+                    <i class="text-danger glyphicon glyphicon-remove"></i>
+                {% else %}
+                    <i class="text-success glyphicon glyphicon-ok"></i>
+                {% endif %}
+            </td>
+            <td>{{ object.ping }}</td>
+            <td>{{ object.timeout }}</td>
+            <td>{{ object.changed }}</td>
+            <td>{{ object.last_updated }}</td>
+        </tr>
+    </tbody>
+    </table>
+{% endblock body %}

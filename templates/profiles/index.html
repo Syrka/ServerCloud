@@ -1,0 +1,40 @@
+{% extends 'common/base.html' %}
+{% load staticfiles %}
+
+{% block body %}
+    <h1>Cloud Application.</h1>
+    <br/>
+    {% if user.is_authenticated %}
+        <h3>Hello {{ user.username }}!</h3>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <td>ID</td>
+                <td>Site URL</td>
+                <td>Configure</td>
+                <td>Delete</td>
+                <td>Details</td>
+            </tr>
+            </thead>
+            <tbody>
+            {% for site in user.site.all %}
+                <tr>
+                    <td>{{ site.pk }}</td>
+                    <td>{{ site.url }}</td>
+                    <td><a href="{% url 'update_site' site.pk %}"><i class="glyphicon glyphicon-refresh"></i> Update</a>
+                    </td>
+                    <td><a href="{% url 'delete_site' site.pk %}"><i class="glyphicon glyphicon-remove"></i> Delete</a>
+                    </td>
+                    <td><a href="{% url 'controller_detail' site.site_controller.pk %}"><i class="glyphicon glyphicon-search"></i> Details</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <a class="btn btn-success" href="{% url 'create_site' %}"><i class="glyphicon glyphicon-plus-sign"></i> New Site</a>
+    {% else %}
+        <h3>Hello world!</h3>
+        <a class="btn btn-primary" href="{% url 'login' %}"><i class="glyphicon glyphicon-log-in"></i> Login</a>
+        <a class="btn btn-primary" href="{% url 'register' %}">Register Here</a>
+    {% endif %}
+{% endblock body %}

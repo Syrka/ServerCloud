@@ -1,0 +1,20 @@
+{% extends 'common/base.html' %}
+{% block body %}
+    <h1>User registration.</h1>
+
+    {% if registered %}
+        Thank you for registering!<br />
+        <a href="{% url 'index' %}">Return to the homepage.</a><br />
+        <a href="/">Return to the homepage.</a><br />
+    {% else %}
+        Please, register here!<br />
+        <form id="user_form" method="post" action="{% url 'register' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            {{ user_form.as_p }}
+{#            {{ profile_form.as_p }}#}
+            <input class="btn btn-primary" type="submit" name="submit" value="Register" />
+        </form>
+    {% endif %}
+
+{% endblock body %}
