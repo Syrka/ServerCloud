@@ -96,6 +96,10 @@ def update_timeout(request):
                                body="Your site {} is out, "
                                     " check if the url is correct.".format(site.url, site.timeout)
                                )
+            except requests.exceptions.ChunkedEncodingError:
+                controller.timeout = "Failed"
+                controller.save()
+
             else:
                 controller.timeout = "OK"
                 controller.save()
@@ -131,18 +135,21 @@ def update_ping(request):
         controller = site.site_controller
 
         if site.ping:
-            r = requests.get(site.url)
-            ping = r.elapsed.total_seconds()
-            controller.ping = ping * 1000
-            controller.save()
-            if ping * 1000 > site.ping:
+            try:
+                r = requests.get(site.url)
+                ping = r.elapsed.total_seconds()
+                controller.ping = ping * 1000
+                controller.save()
+                if ping * 1000 > site.ping:
 
-                mail.send_mail(sender=EMAIL_HOST_USER,
-                               to=[site.profile.email],
-                               subject="Ping problems.",
-                               body="Your site {} loaded in {} miliseconds."
-                                    " More than the {} miliseconds you specified.".format(site.url, ping * 1000, site.ping)
-                               )
+                    mail.send_mail(sender=EMAIL_HOST_USER,
+                                   to=[site.profile.email],
+                                   subject="Ping problems.",
+                                   body="Your site {} loaded in {} miliseconds."
+                                        " More than the {} miliseconds you specified.".format(site.url, ping * 1000, site.ping)
+                                   )
+            except requests.exceptions.ChunkedEncodingError:
+                pass
     return HttpResponse()
 
 

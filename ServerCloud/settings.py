@@ -45,7 +45,7 @@ else:
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ['servercloud-sara.appspot.com']
+ALLOWED_HOSTS = ['*']
 
 AUTH_USER_MODEL = 'profiles.MyUser'
 
@@ -85,7 +85,6 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-# STATIC_ROOT = ''
 STATIC_ROOT = 'static'
 
 # URL prefix for static files.

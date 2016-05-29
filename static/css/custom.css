@@ -1,0 +1,6 @@
+#id_profile {
+    visibility: hidden;
+}
+label[for=id_profile] {
+    visibility: hidden;
+}
