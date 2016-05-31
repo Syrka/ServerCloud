@@ -31,7 +31,7 @@ def update_status(request):
                 return HttpResponse()  # Could raise SSL Certificate Error
             controller.status = status
             controller.save()
-            if status is not 200:
+            if status != 200:
                 mail.send_mail(sender=EMAIL_HOST_USER,
                                to=[site.profile.email],
                                subject="Status Error",
@@ -158,25 +158,31 @@ def update_content_changed(request):
         controller = site.site_controller
 
         if site.content_changed:
-            r = requests.get(site.url).content
-            soup = BeautifulSoup(r, parseOnlyThese=SoupStrainer(site.content_type))
-            content = hashlib.md5(soup.text.encode('utf-8')).hexdigest()
+            try:
+                r = requests.get(site.url).content
+                soup = BeautifulSoup(r, parseOnlyThese=SoupStrainer(site.content_type))
+                content = hashlib.md5(soup.text.encode('utf-8')).hexdigest()
 
-            if controller.content != content and controller.content != "xx":
-                controller.changed = True
+                if controller.content != content and controller.content != "xx":
+                    controller.changed = True
+                    controller.save()
+
+                    mail.send_mail(sender=EMAIL_HOST_USER,
+                                   to=[site.profile.email],
+                                   subject="Content change.",
+                                   body="The content of your site {} has been modified.".format(site.url)
+                                   )
+
+                if controller.content == content:
+                    controller.changed = False
+
+                controller.content = content
                 controller.save()
 
-                mail.send_mail(sender=EMAIL_HOST_USER,
-                               to=[site.profile.email],
-                               subject="Content change.",
-                               body="The content of your site {} has been modified.".format(site.url)
-                               )
-
-            if controller.content == content:
+            except requests.exceptions.ChunkedEncodingError:
                 controller.changed = False
+                controller.save()
 
-            controller.content = content
-            controller.save()
     return HttpResponse()
 
 
